@@ -7,7 +7,7 @@ export const todoController = {
   async getAllTodo(request: FastifyRequest, reply: FastifyReply) {
     try {
       const todos = await todoModel.findAll();
-      return successResponse(reply, todos, 201);
+      return successResponse(reply, todos, 200);
     } catch (error) {
       return sendError(
         reply,

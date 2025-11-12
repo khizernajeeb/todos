@@ -14,7 +14,6 @@ export const createTodoSchema = {
       description: {
         type: "string",
         minLength: 1,
-        maxLength: 255,
       },
       completed: {
         type: "boolean",
@@ -52,6 +51,8 @@ export const createTodoSchema = {
 };
 
 export const updateTodoSchema = {
+  tags: ["todos"],
+  description: "Update an existing todo",
   body: {
     type: "object",
     properties: {

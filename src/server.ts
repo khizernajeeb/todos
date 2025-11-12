@@ -1,16 +1,18 @@
+import fastifyCors from "@fastify/cors";
 import fastifySwagger from "@fastify/swagger";
 import fastifySwaggerUI from "@fastify/swagger-ui";
 import dotenv from "dotenv";
 import Fastify from "fastify";
 import pool from "./config/database";
+import { env } from "./config/env";
 import { todoRoutes } from "./routes/todo.route";
 import { errorHandler } from "./utils/errorHandler";
 
 const fastify = Fastify({
   logger: {
-    level: process.env.LOG_LEVEL || "info",
+    level: env.LOG_LEVEL || "info",
     transport:
-      process.env.NODE_ENV === "development"
+      env.NODE_ENV === "development"
         ? {
             target: "pino-pretty",
             options: {
@@ -22,8 +24,13 @@ const fastify = Fastify({
 });
 dotenv.config();
 
-const PORT = Number(process.env.PORT) || 3000;
-const HOST = process.env.HOST || "0.0.0.0";
+const PORT = env.PORT;
+const HOST = env.HOST;
+
+fastify.register(fastifyCors, {
+  origin: process.env.NODE_ENV === "production" ? [""] : true, // Allow all in development
+  credentials: true,
+});
 
 // Register Swagger
 fastify.register(fastifySwagger, {
