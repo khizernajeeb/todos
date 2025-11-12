@@ -1,10 +1,24 @@
 import { FastifyInstance } from "fastify";
 import { todoController } from "../controllers/todo.controller";
-import { createTodoSchema, updateTodoSchema } from "../schemas/todo.schema";
+import {
+  createTodoSchema,
+  deleteTodoSchema,
+  getAllTodosSchema,
+  getTodoByIdSchema,
+  updateTodoSchema,
+} from "../schemas/todo.schema";
 
 export async function todoRoutes(fastify: FastifyInstance) {
-  fastify.get("/todos", todoController.getAllTodo);
-  fastify.get("/todos/:id", todoController.getTodoById);
+  fastify.get(
+    "/todos",
+    { schema: getAllTodosSchema },
+    todoController.getAllTodo
+  );
+  fastify.get(
+    "/todos/:id",
+    { schema: getTodoByIdSchema },
+    todoController.getTodoById
+  );
   fastify.post(
     "/todos",
     { schema: createTodoSchema },
@@ -15,5 +29,9 @@ export async function todoRoutes(fastify: FastifyInstance) {
     { schema: updateTodoSchema },
     todoController.updateTodo
   );
-  fastify.delete("/todos/:id", todoController.deleteTodo);
+  fastify.delete(
+    "/todos/:id",
+    { schema: deleteTodoSchema },
+    todoController.deleteTodo
+  );
 }

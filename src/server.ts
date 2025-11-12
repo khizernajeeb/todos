@@ -1,17 +1,65 @@
+import fastifySwagger from "@fastify/swagger";
+import fastifySwaggerUI from "@fastify/swagger-ui";
 import dotenv from "dotenv";
 import Fastify from "fastify";
 import pool from "./config/database";
 import { todoRoutes } from "./routes/todo.route";
 import { errorHandler } from "./utils/errorHandler";
 
-dotenv.config();
-
 const fastify = Fastify({
-  logger: true,
+  logger: {
+    level: process.env.LOG_LEVEL || "info",
+    transport:
+      process.env.NODE_ENV === "development"
+        ? {
+            target: "pino-pretty",
+            options: {
+              colorize: true,
+            },
+          }
+        : undefined,
+  },
 });
+dotenv.config();
 
 const PORT = Number(process.env.PORT) || 3000;
 const HOST = process.env.HOST || "0.0.0.0";
+
+// Register Swagger
+fastify.register(fastifySwagger, {
+  swagger: {
+    info: {
+      title: "Todo API",
+      description: "A RESTful API for managing todos",
+      version: "1.0.0",
+    },
+    host: `${HOST}:${PORT}`,
+    schemes: ["http", "https"],
+    consumes: ["application/json"],
+    produces: ["application/json"],
+    tags: [
+      {
+        name: "todos",
+        description: "Todo related endpoints",
+      },
+      {
+        name: "health",
+        description: "Health check endpoints",
+      },
+    ],
+  },
+});
+
+// Register Swagger UI
+fastify.register(fastifySwaggerUI, {
+  routePrefix: "/docs",
+  uiConfig: {
+    docExpansion: "list", // or 'full' or 'none'
+    deepLinking: true,
+  },
+  staticCSP: true,
+  transformStaticCSP: (header: string) => header,
+});
 
 fastify.get("/health", async (request, reply) => {
   try {
