@@ -3,7 +3,9 @@ import { Todo, TodoCreate, TodoUpdate } from "../types";
 
 export const todoModel = {
   async findAll(): Promise<Todo[]> {
-    const result = await pool.query("SELECT * FROM todos");
+    const result = await pool.query(
+      "SELECT * FROM todos ORDER BY created_at DESC"
+    );
     return result.rows;
   },
   async findById(id: number): Promise<Todo | null> {
@@ -45,7 +47,7 @@ export const todoModel = {
     }
 
     if (updates.length === 0) {
-      return null;
+      return this.findById(id);
     }
 
     values.push(id);

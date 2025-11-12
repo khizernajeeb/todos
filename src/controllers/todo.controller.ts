@@ -42,6 +42,12 @@ export const todoController = {
 
   async createTodo(request: FastifyRequest, reply: FastifyReply) {
     try {
+      const { title } = request.body as TodoCreate;
+
+      if (!title || title.trim() === "") {
+        return reply.code(400).send({ error: "Title is required" });
+      }
+
       const todo = await todoModel.create(request.body as TodoCreate);
       return reply.status(201).send(todo);
     } catch (error) {
