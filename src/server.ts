@@ -2,6 +2,7 @@ import dotenv from "dotenv";
 import Fastify from "fastify";
 import pool from "./config/database";
 import { todoRoutes } from "./routes/todo.route";
+import { errorHandler } from "./utils/errorHandler";
 
 dotenv.config();
 
@@ -48,6 +49,8 @@ process.on("SIGINT", gracefulShutdown);
 fastify.register(async (fastify) => {
   await fastify.register(todoRoutes, { prefix: "/api" });
 });
+
+fastify.setErrorHandler(errorHandler);
 
 const start = async () => {
   try {
