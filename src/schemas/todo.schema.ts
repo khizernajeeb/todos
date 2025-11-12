@@ -60,9 +60,19 @@ export const updateTodoSchema = {
         type: "string",
         minLength: 1,
         maxLength: 255,
+        description: "Todo title (optional)",
+      },
+      description: {
+        type: "string",
+        minLength: 1,
+        description: "Todo description (optional)",
+      },
+      completed: {
+        type: "boolean",
+        description: "Todo completion status (optional)",
       },
     },
-    required: ["title"],
+    // No required fields - all fields are optional for partial updates
   },
   params: {
     type: "object",
