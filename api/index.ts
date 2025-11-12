@@ -19,6 +19,8 @@ const fastify = Fastify({
 fastify.register(fastifyCors, {
   origin: "*", // Allow all origins
   credentials: false,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
+  allowedHeaders: ["Content-Type", "Authorization", "Accept"],
 });
 
 fastify.register(fastifySwagger, {
