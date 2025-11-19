@@ -1,0 +1,25 @@
+version: 2
+updates:
+  # Enable version updates for npm
+  - package-ecosystem: "npm"
+    directory: "/"
+    schedule:
+      interval: "weekly"  # Can be: daily, weekly, monthly
+      day: "monday"       # Optional: specify day
+      time: "09:00"       # Optional: specify time (UTC)
+    open-pull-requests-limit: 5  # Max PRs at once
+    reviewers:
+      - "khizernajeeb"   # Auto-assign reviewers
+    assignees:
+      - "khizernajeeb"   # Auto-assign to you
+    labels:
+      - "dependencies"
+      - "automated"
+    # Group updates (optional)
+    groups:
+      production-dependencies:
+        patterns:
+          - "*"
+        update-types:
+          - "minor"
+          - "patch"
